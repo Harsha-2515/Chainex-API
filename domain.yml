@@ -1,0 +1,84 @@
+version: "3.1"
+
+intents:
+  - greet
+  - goodbye
+  - affirm
+  - deny
+  - stock_quantity_search
+  - order_status
+  - shipment_info
+  - invoice_info
+  - client_info
+  - warehouse_info
+  - help
+  - out_of_scope
+
+entities:
+  - item_name
+  - warehouse_name
+  - order_id
+  - status
+  - client_name
+
+slots:
+  item_name:
+    type: text
+    influence_conversation: true
+    mappings:
+      - type: from_entity
+        entity: item_name
+  warehouse_name:
+    type: text
+    influence_conversation: true
+    mappings:
+      - type: from_entity
+        entity: warehouse_name
+  order_id:
+    type: text
+    influence_conversation: true
+    mappings:
+      - type: from_entity
+        entity: order_id
+  status:
+    type: text
+    influence_conversation: true
+    mappings:
+      - type: from_entity
+        entity: status
+  client_name:
+    type: text
+    influence_conversation: true
+    mappings:
+      - type: from_entity
+        entity: client_name
+
+responses:
+  utter_greet:
+    - text: "Hello! I am your supply chain assistant. I can help you with stock queries, order status, shipments, invoices, and more. How can I help you today?"
+  utter_goodbye:
+    - text: "Goodbye! Let me know if you need any more help with your supply chain operations."
+  utter_help:
+    - text: |
+        I can help you with:
+        📦 **Stock Management**: Check stock levels for items like "Four Little Friends"
+        📋 **Order Status**: Track orders by ID (e.g., "N106938")
+        🚚 **Shipments**: Get shipment and delivery information
+        🧾 **Invoices**: Check invoice details and payment status
+        🏢 **Clients**: Get client information
+        🏭 **Warehouses**: View warehouse details and locations
+        
+        Just ask me questions like:
+        - "What is the stock left for Four Little Friends?"
+        - "What is the order status of N106938?"
+        - "Show me warehouse information"
+  utter_out_of_scope:
+    - text: "I'm a supply chain assistant focused on inventory, orders, shipments, and logistics. I can't help with that, but I'd be happy to assist with supply chain related questions!"
+
+actions:
+  - action_stock_quantity_search
+  - action_order_status
+  - action_shipment_info
+  - action_invoice_info
+  - action_client_info
+  - action_warehouse_info

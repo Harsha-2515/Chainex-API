@@ -1,0 +1,52 @@
+version: "3.1"
+stories:
+
+- story: greet user
+  steps:
+    - intent: greet
+    - action: utter_greet
+
+- story: goodbye user
+  steps:
+    - intent: goodbye
+    - action: utter_goodbye
+
+- story: help user
+  steps:
+    - intent: help
+    - action: utter_help
+
+- story: out of scope
+  steps:
+    - intent: out_of_scope
+    - action: utter_out_of_scope
+
+- story: stock quantity search
+  steps:
+    - intent: stock_quantity_search
+    - action: action_stock_quantity_search
+
+- story: order status check
+  steps:
+    - intent: order_status
+    - action: action_order_status
+
+- story: shipment information
+  steps:
+    - intent: shipment_info
+    - action: action_shipment_info
+
+- story: invoice information
+  steps:
+    - intent: invoice_info
+    - action: action_invoice_info
+
+- story: client information
+  steps:
+    - intent: client_info
+    - action: action_client_info
+
+- story: warehouse information
+  steps:
+    - intent: warehouse_info
+    - action: action_warehouse_info

@@ -1,0 +1,137 @@
+version: "3.1"
+nlu:
+
+- intent: greet
+  examples: |
+    - hi
+    - hello
+    - hey
+    - good morning
+    - good afternoon
+    - hey there
+    - good evening
+    - greetings
+
+- intent: goodbye
+  examples: |
+    - goodbye
+    - bye
+    - see you later
+    - cya
+    - nice talking to you
+    - have a good day
+    - take care
+
+- intent: affirm
+  examples: |
+    - yes
+    - absolutely
+    - indeed
+    - correct
+    - that's right
+    - sure
+    - of course
+
+- intent: deny
+  examples: |
+    - no
+    - nope
+    - not now
+    - never
+    - not really
+
+- intent: stock_quantity_search
+  examples: |
+    - What is the stock left for [Four Little Friends](item_name)?
+    - How much stock do we have of [Four Little Friends](item_name)?
+    - Check stock for [Four Little Friends](item_name)
+    - What's the inventory of [Four Little Friends](item_name)?
+    - Show me stock levels for [Four Little Friends](item_name)
+    - Do we have [Four Little Friends](item_name) in stock?
+    - How many [Four Little Friends](item_name) are available?
+    - Stock quantity for [Four Little Friends](item_name)
+    - Available stock of [Four Little Friends](item_name)
+    - Inventory count for [Four Little Friends](item_name)
+    - What's the stock of [Four Little Friends](item_name) in [Warehouse A](warehouse_name)?
+    - Check [Four Little Friends](item_name) stock in [Warehouse A](warehouse_name)
+    - How much [Four Little Friends](item_name) is in [Warehouse A](warehouse_name)?
+
+- intent: order_status
+  examples: |
+    - What's the status of order [N106938](order_id)?
+    - Has order [N106938](order_id) been shipped?
+    - Track order number [N106938](order_id)
+    - What's the status of my order? The order number is [N106938](order_id)
+    - Show status for order [N106938](order_id)
+    - Is order [N106938](order_id) ready for shipping?
+    - Check order [N106938](order_id) status
+    - Order [N106938](order_id) status update
+    - Update order [N106938](order_id) status to [SHIPPED](status)
+    - Change order [N106938](order_id) status to [PACKED](status)
+    - Set order [N106938](order_id) status to [DELIVERED](status)
+
+- intent: shipment_info
+  examples: |
+    - What's the shipment status for order [N106938](order_id)?
+    - Show shipment details for [N106938](order_id)
+    - Which courier is handling order [N106938](order_id)?
+    - Track shipment for order [N106938](order_id)
+    - Shipment information for [N106938](order_id)
+    - Delivery status of order [N106938](order_id)
+    - Courier details for [N106938](order_id)
+    - Shipping info for order [N106938](order_id)
+
+- intent: invoice_info
+  examples: |
+    - Show invoice for order [N106938](order_id)
+    - What's the invoice status for [N106938](order_id)?
+    - Invoice details for order [N106938](order_id)
+    - Billing information for [N106938](order_id)
+    - Payment status for order [N106938](order_id)
+    - Invoice amount for [N106938](order_id)
+    - Check invoice for order [N106938](order_id)
+    - Invoice summary for [N106938](order_id)
+
+- intent: client_info
+  examples: |
+    - Show information about client [Client A](client_name)
+    - What are the details for [Client A](client_name)?
+    - Client information for [Client A](client_name)
+    - Show client details for [Client A](client_name)
+    - Information about [Client A](client_name)
+    - Client profile for [Client A](client_name)
+    - Details of [Client A](client_name)
+    - Who is [Client A](client_name)?
+
+- intent: warehouse_info
+  examples: |
+    - Show warehouse information
+    - What warehouses do we have?
+    - List all warehouses
+    - Show warehouse details for [Warehouse A](warehouse_name)
+    - Information about [Warehouse A](warehouse_name)
+    - Warehouse details for [Warehouse A](warehouse_name)
+    - Where is [Warehouse A](warehouse_name) located?
+    - Show me [Warehouse A](warehouse_name) details
+
+- intent: help
+  examples: |
+    - help
+    - what can you do?
+    - what are your capabilities?
+    - how can you help me?
+    - what questions can I ask?
+    - show me available commands
+    - what do you do?
+    - how do I use this system?
+
+- intent: out_of_scope
+  examples: |
+    - what's the weather like?
+    - tell me a joke
+    - what's your favorite color?
+    - how old are you?
+    - what time is it?
+    - what's 2+2?
+    - can you sing?
+    - do you like pizza?

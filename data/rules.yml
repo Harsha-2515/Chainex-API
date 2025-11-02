@@ -1,0 +1,53 @@
+version: "3.1"
+
+rules:
+
+- rule: Greet the user
+  steps:
+    - intent: greet
+    - action: utter_greet
+
+- rule: Say goodbye to the user
+  steps:
+    - intent: goodbye
+    - action: utter_goodbye
+
+- rule: Provide help
+  steps:
+    - intent: help
+    - action: utter_help
+
+- rule: Handle out of scope
+  steps:
+    - intent: out_of_scope
+    - action: utter_out_of_scope
+
+- rule: Respond to stock quantity search
+  steps:
+    - intent: stock_quantity_search
+    - action: action_stock_quantity_search
+
+- rule: Respond to order status query
+  steps:
+    - intent: order_status
+    - action: action_order_status
+
+- rule: Respond to shipment information query
+  steps:
+    - intent: shipment_info
+    - action: action_shipment_info
+
+- rule: Respond to invoice information query
+  steps:
+    - intent: invoice_info
+    - action: action_invoice_info
+
+- rule: Respond to client information query
+  steps:
+    - intent: client_info
+    - action: action_client_info
+
+- rule: Respond to warehouse information query
+  steps:
+    - intent: warehouse_info
+    - action: action_warehouse_info
