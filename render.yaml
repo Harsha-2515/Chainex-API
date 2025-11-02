@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: rasa-chatbot
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: ./start.sh
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.10.11
+      - key: ACTION_ENDPOINT_URL
+        value: http://localhost:5055
