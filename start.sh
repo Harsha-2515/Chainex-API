@@ -7,7 +7,7 @@ if [ ! -d "models" ]; then
     rasa train
 fi
 
-cd actions & rasa run acrtions & cd ..
+cd actions & rasa run actions & cd ..
 
 # Start the main Rasa server only
 echo "Starting Rasa server on port $PORT"
