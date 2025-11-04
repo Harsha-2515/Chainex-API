@@ -30,7 +30,7 @@ echo "Found model: $LATEST_MODEL"
 (
   echo "🚀 Starting Action Server on port 5055..."
   cd actions
-  rasa run actions
+  rasa run actions --port 5055
 ) &
 
 # --- Start Main Rasa Server (like 'rasa run --enable-api --cors "*"') ---
