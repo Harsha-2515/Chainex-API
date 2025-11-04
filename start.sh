@@ -20,12 +20,24 @@ fi
 
 echo "Found model: $LATEST_MODEL"
 
-# Start actions server in background (from root - it finds actions/ automatically)
-echo "Starting Rasa actions on port 5055"
-cd actions & rasa run actions & cd ..
+# # Start actions server in background (from root - it finds actions/ automatically)
+# echo "Starting Rasa actions on port 5055"
+# cd actions & rasa run actions & cd ..
 
+# rasa run --enable-api --cors "*" --port $PORT
+
+
+(
+  echo "🚀 Starting Action Server on port 5055..."
+  cd actions
+  rasa run actions
+) &
+
+# --- Start Main Rasa Server (like 'rasa run --enable-api --cors "*"') ---
+(
+  echo "🚀 Starting Main Rasa Server on port ${PORT:-5005}..."
 rasa run --enable-api --cors "*" --port $PORT
-
+)
 # Start the main Rasa server (from root - it needs config.yml, domain.yml here)
 # echo "Starting Rasa server on port ${APP_PORT} with model: ${LATEST_MODEL}"
 # rasa run --enable-api --cors "*" -i 0.0.0.0 --port "${APP_PORT}" -m "${LATEST_MODEL}"
