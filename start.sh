@@ -1,14 +1,29 @@
 #!/usr/bin/env bash
 set -e
 
-# Train model if no models exist
-if [ ! -d "models" ]; then
-    echo "Training model..."
-    rasa train
+# Use Render's assigned port or default for local dev
+APP_PORT="${PORT:-5005}"
+
+# Check if model exists
+if [ ! -d "models" ] || [ -z "$(ls -A models/*.tar.gz 2>/dev/null)" ]; then
+    echo "ERROR: No model .tar.gz found in ./models/"
+    echo "Please train locally (rasa train) and copy the .tar.gz into ChainEX-API/models/"
+    exit 1
 fi
 
-cd actions & rasa run actions & cd ..
+# Find the latest model
+LATEST_MODEL=$(ls -t models/*.tar.gz 2>/dev/null | head -1)
+if [ -z "$LATEST_MODEL" ]; then
+    echo "ERROR: No valid model found in models/"
+    exit 1
+fi
 
-# Start the main Rasa server only
-echo "Starting Rasa server on port $PORT"
-rasa run --enable-api --cors "*" --port $PORT
+echo "Found model: $LATEST_MODEL"
+
+# Start actions server in background (from root - it finds actions/ automatically)
+echo "Starting Rasa actions on port 5055"
+rasa run actions --port 5055 &
+
+# Start the main Rasa server (from root - it needs config.yml, domain.yml here)
+echo "Starting Rasa server on port ${APP_PORT} with model: ${LATEST_MODEL}"
+rasa run --enable-api --cors "*" -i 0.0.0.0 --port "${APP_PORT}" -m "${LATEST_MODEL}"
