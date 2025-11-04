@@ -2,7 +2,7 @@
 set -e
 
 # Use Render's assigned port or default for local dev
-APP_PORT="${PORT:-5005}"
+# APP_PORT="${PORT:-5005}"
 
 # Check if model exists
 if [ ! -d "models" ] || [ -z "$(ls -A models/*.tar.gz 2>/dev/null)" ]; then
@@ -22,8 +22,10 @@ echo "Found model: $LATEST_MODEL"
 
 # Start actions server in background (from root - it finds actions/ automatically)
 echo "Starting Rasa actions on port 5055"
-cd actions & rasa run actions --port 5055 & cd..
+cd actions & rasa run actions & cd ..
+
+rasa run --enable-api --cors "*" --port $PORT
 
 # Start the main Rasa server (from root - it needs config.yml, domain.yml here)
 echo "Starting Rasa server on port ${APP_PORT} with model: ${LATEST_MODEL}"
-rasa run --enable-api --cors "*" -i 0.0.0.0 --port "${APP_PORT}" -m "${LATEST_MODEL}"
+# rasa run --enable-api --cors "*" -i 0.0.0.0 --port "${APP_PORT}" -m "${LATEST_MODEL}"
