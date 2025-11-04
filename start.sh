@@ -36,7 +36,7 @@ echo "Found model: $LATEST_MODEL"
 # --- Start Main Rasa Server (like 'rasa run --enable-api --cors "*"') ---
 (
   echo "🚀 Starting Main Rasa Server on port ${PORT:-5005}..."
-rasa run --enable-api --cors "*" --port $PORT
+  rasa run --enable-api --cors "*" --port $PORT
 )
 # Start the main Rasa server (from root - it needs config.yml, domain.yml here)
 # echo "Starting Rasa server on port ${APP_PORT} with model: ${LATEST_MODEL}"
