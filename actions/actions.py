@@ -91,20 +91,21 @@ class ActionOrderStatus(Action):
         status = tracker.get_slot("status")
         
         if not order_id:
-            dispatcher.utter_message("Please provide an order ID.")
+            dispatcher.utter_message("Please provide an order ID, sales order number, or client sales order number.")
             return []
         
         try:
-            # Search for order by order ID
+            # Search for order by order ID, sales order number, or client sales order number
             order = db["orders"].find_one({
                 "$or": [
                     {"or_orderId": str(order_id)},
-                    {"cc_salesOrderNo": str(order_id)}
+                    {"cc_salesOrderNo": str(order_id)},
+                    {"cc_clientSalesOrderNo": str(order_id)}
                 ]
             })
             
             if not order:
-                dispatcher.utter_message(f"Order '{order_id}' not found.")
+                dispatcher.utter_message(f"Order '{order_id}' not found. Please check if you provided the correct order ID, sales order number, or client sales order number.")
                 return []
             
             # If updating status
@@ -115,11 +116,18 @@ class ActionOrderStatus(Action):
                 return []
             
             # Get order details
-            order_id_found = order.get("or_orderId", order.get("cc_salesOrderNo", "Unknown"))
+            order_id_found = order.get("or_orderId", "N/A")
+            sales_order_no = order.get("cc_salesOrderNo", "N/A")
+            client_sales_order_no = order.get("cc_clientSalesOrderNo", "N/A")
             order_status = order.get("cc_orderStatus", "Unknown")
             order_date = order.get("or_orderDate", "Unknown")
             client_name = order.get("cc_clientName", "Unknown")
-            order_total = order.get("cc_orderTotal", order.get("or_total", "Unknown"))
+            order_total = order.get("cc_orderTotal", order.get("or_total", 0))
+            currency = order.get("or_currency", "USD")
+            
+            # Format date if it's a datetime object
+            if hasattr(order_date, 'strftime'):
+                order_date = order_date.strftime("%Y-%m-%d")
             
             # Get order items
             order_items = list(db["orderitems"].find({"cc_orderId": order["_id"]}))
@@ -129,14 +137,17 @@ class ActionOrderStatus(Action):
                 quantity = item.get("cc_quantity", 0)
                 items_info.append(f"• {item_name} (Qty: {quantity})")
             
-            response = f"📋 **Order {order_id_found}**\n"
+            response = f"📋 **Order Information**\n"
+            response += f"Order ID: {order_id_found}\n"
+            response += f"Sales Order No: {sales_order_no}\n"
+            response += f"Client Sales Order No: {client_sales_order_no}\n"
             response += f"Status: {order_status}\n"
             response += f"Date: {order_date}\n"
             response += f"Client: {client_name}\n"
-            response += f"Total: ${order_total}\n"
+            response += f"Total: {currency} {order_total}\n"
             
             if items_info:
-                response += f"Items: {', '.join(items_info)}"
+                response += f"\nItems: {', '.join(items_info)}"
                 if len(order_items) > 3:
                     response += f" (and {len(order_items) - 3} more items)"
             
@@ -261,35 +272,44 @@ class ActionClientInfo(Action):
     def run(self, dispatcher, tracker, domain):
         client_name = tracker.get_slot("client_name")
         
-        if not client_name:
-            dispatcher.utter_message("Please specify the client name.")
-            return []
-        
         try:
-            # Search for client by name
-            clients = list(db["clients"].find({
-                "clientName": {"$regex": f".*{re.escape(client_name)}.*", "$options": "i"},
-                "status": "ACTIVE"
-            }))
-            
-            if not clients:
-                dispatcher.utter_message(f"No active clients found matching '{client_name}'.")
-                return []
+            if client_name:
+                # Search for specific client by name
+                clients = list(db["clients"].find({
+                    "clientName": {"$regex": f".*{re.escape(client_name)}.*", "$options": "i"},
+                    "status": "ACTIVE"
+                }))
+                
+                if not clients:
+                    dispatcher.utter_message(f"No active clients found matching '{client_name}'.")
+                    return []
+            else:
+                # List all active clients
+                clients = list(db["clients"].find({"status": "ACTIVE"}).sort("clientName", 1))
+                
+                if not clients:
+                    dispatcher.utter_message("No active clients found in the system.")
+                    return []
             
             response_parts = []
             for client in clients:
                 client_name_found = client.get("clientName", "Unknown")
                 client_id = client.get("clientId", "Unknown")
                 email = client.get("email", "Not provided")
-                website = client.get("website", "Not provided")
                 
                 response_parts.append(
-                    f"🏢 **{client_name_found}** (ID: {client_id})\n"
-                    f"Email: {email}\n"
-                    f"Website: {website}"
+                    f"🏢 **{client_name_found}**\n"
+                    f"Client ID: {client_id}\n"
+                    f"Email: {email}"
                 )
             
-            dispatcher.utter_message("\n\n".join(response_parts))
+            if client_name:
+                dispatcher.utter_message("\n\n".join(response_parts))
+            else:
+                # Format as a nice list when showing all clients
+                response = f"📋 **All Active Clients** (Total: {len(clients)})\n\n"
+                response += "\n".join(response_parts)
+                dispatcher.utter_message(response)
             
         except Exception as e:
             dispatcher.utter_message(f"Error checking client information: {str(e)}")
@@ -326,13 +346,24 @@ class ActionWarehouseInfo(Action):
                 city = warehouse.get("city", "Unknown")
                 state = warehouse.get("state", "Unknown")
                 country = warehouse.get("country", "Unknown")
+                postal_code = warehouse.get("postalCode", "Not provided")
                 
                 response_parts.append(
-                    f"🏭 **{name}** (ID: {warehouse_id})\n"
-                    f"Location: {city}, {state}, {country}"
+                    f"🏭 **{name}**\n"
+                    f"Warehouse ID: {warehouse_id}\n"
+                    f"City: {city}\n"
+                    f"State: {state}\n"
+                    f"Country: {country}\n"
+                    f"Postal Code: {postal_code}"
                 )
             
-            dispatcher.utter_message("\n\n".join(response_parts))
+            if warehouse_name:
+                dispatcher.utter_message("\n\n".join(response_parts))
+            else:
+                # Format as a nice list when showing all warehouses
+                response = f"📋 **All Active Warehouses** (Total: {len(warehouses)})\n\n"
+                response += "\n\n".join(response_parts)
+                dispatcher.utter_message(response)
             
         except Exception as e:
             dispatcher.utter_message(f"Error checking warehouse information: {str(e)}")

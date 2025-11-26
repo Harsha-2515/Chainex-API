@@ -69,6 +69,12 @@ nlu:
     - Update order [N106938](order_id) status to [SHIPPED](status)
     - Change order [N106938](order_id) status to [PACKED](status)
     - Set order [N106938](order_id) status to [DELIVERED](status)
+    - What's the status of sales order [SO_001](order_id)?
+    - Check status for sales order number [SO_002](order_id)
+    - Track sales order [SO_003](order_id)
+    - Show me the status of client sales order [CLI_SO_001](order_id)
+    - What's the status for client sales order number [CLI_SO_002](order_id)?
+    - Check client sales order [CLI_SO_003](order_id) status
 
 - intent: shipment_info
   examples: |
@@ -102,12 +108,26 @@ nlu:
     - Client profile for [Client A](client_name)
     - Details of [Client A](client_name)
     - Who is [Client A](client_name)?
+    - List all clients
+    - Show me all clients
+    - What clients do we have?
+    - Display all clients
+    - Get me a list of all clients
+    - Show all client information
+    - List all the clients
+    - Can you show me all clients?
 
 - intent: warehouse_info
   examples: |
     - Show warehouse information
     - What warehouses do we have?
     - List all warehouses
+    - Show all warehouses
+    - Display all warehouses
+    - Get me a list of all warehouses
+    - Show all warehouse information
+    - List all the warehouses
+    - Can you show me all warehouses?
     - Show warehouse details for [Warehouse A](warehouse_name)
     - Information about [Warehouse A](warehouse_name)
     - Warehouse details for [Warehouse A](warehouse_name)
